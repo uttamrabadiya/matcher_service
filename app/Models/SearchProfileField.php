@@ -31,4 +31,25 @@ class SearchProfileField extends Model
     {
         return $this->belongsTo(SearchProfile::class);
     }
+
+    public function scopeMatchMinValue($query, $fieldValue)
+    {
+        return $query->where(function($query) use($fieldValue) {
+            $query->whereNull('loose_min_value')->orWhere('loose_min_value', '<=', $fieldValue);
+        });
+    }
+
+    public function scopeMatchMaxValue($query, $fieldValue)
+    {
+        return $query->where(function($query) use($fieldValue) {
+            $query->whereNull('loose_max_value')->orWhere('loose_max_value', '>=', $fieldValue);
+        });
+    }
+
+    public function scopeMatchField($query, $field, $fieldValue)
+    {
+        return $query->where('field', $field)
+            ->matchMinValue($fieldValue)
+            ->matchMaxValue($fieldValue);
+    }
 }
