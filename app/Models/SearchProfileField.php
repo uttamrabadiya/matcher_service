@@ -14,15 +14,13 @@ class SearchProfileField extends Model
     {
         parent::boot();
         self::creating(function($model){
+            $model->loose_min_value = null;
+            $model->loose_max_value = null;
             if ($model->min_value && is_numeric($model->min_value)) {
                 $model->loose_min_value = ($model->min_value - (($model->min_value * 25) / 100));
-            } else {
-                $model->loose_min_value = null;
             }
             if ($model->max_value && is_numeric($model->max_value)) {
                 $model->loose_max_value = ($model->max_value + (($model->max_value * 25) / 100));
-            } else {
-                $model->loose_max_value = null;
             }
         });
     }
